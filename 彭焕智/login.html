@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>login</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.box{
+			width: 300px;
+			height: 400px;
+			padding: 0 20px;
+			border: 2px solid #1688ea;
+			margin: 50px auto;
+		}
+		.tit{
+			margin-top: 5px;
+			margin-bottom: 30px;
+		}
+		.brand{
+			color: #1688ea;
+			font-size: 18px;
+			margin-right: 20px;
+		}
+		.inp{
+			width: 100%;
+			height: 40px;
+			text-indent: 8px;
+		}
+		.notice{
+			height: 30px;
+			line-height: 30px;
+			font-size: 12px;
+		}
+
+		.code{
+			width: 60%;
+		}
+		.getCode{
+			width: 35%;
+			height: 44px;
+			float: right;
+			border: none;
+			background-color: #eee;
+		}
+		.codeImg{
+			height: 40px;
+		}
+		.btn{
+			background: #1688ea;
+			width: 100%;
+			height: 40px;
+			border: none;
+			margin-top: 8px;
+			color: #fff;
+			border-radius: 3px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="box">
+		<p class="tit">
+			<span class="brand">Web开发二</span>
+			<span>用户登录</span>
+		</p>
+
+		<input class="inp" type="text" placeholder="用户名" id="userName">
+		<p class="notice" id = "nameTips"></p>
+
+		<input class="inp" type="password" placeholder="密码" id = "pswd">
+		<p class="notice" id = "pswTips"></p>
+
+		<div>
+			<input class="inp code" type="text" placeholder="验证码" id = "verificationCode">
+			<button class="getCode" id = "getVerificationCode">获取验证码</button>
+		</div>
+		<div class="codeImg" id = "imgArea">
+			<!-- 点击‘获取验证码’按钮后，在此处添加 验证码图片的img标签 -->
+		</div>
+		<p class="notice" id = "judgeCode"></p>
+
+		<input type="checkbox" checked>下次自动登录
+		<button class="btn" onclick="landing()" id = "landing">登录</button>
+	</div>
+</body>
+	<script>
+		var userName = document.getElementById("userName");
+		var pswd = document.getElementById("pswd");
+		var nameTips = document.getElementById("nameTips");
+		var pswTips = document.getElementById("pswTips");
+		userName.onfocus = function(){
+			nameTips.innerHTML = "请输入4-10位用户名";
+		}	
+		userName.onblur = function(){
+			nameTips.innerHTML = "";
+		}
+		pswd.onfocus = function(){
+			pswTips.innerHTML = "请输入6-12位密码";
+		}
+		pswd.onblur = function(){
+			pswTips.innerHTML = "";
+		}
+		var index;
+		var getVerificationCode = document.getElementById("getVerificationCode");
+		var imgArr = ["image/zAZfB.jpg","image/ZEhUN.jpg","image/zFC9H.jpg","image/zhWY9.jpg","image/Zin4c.jpg","image/ZITGj.jpg","image/zJ6iV.jpg","image/zjsKP.jpg","image/ZKc9S.jpg","image/zKDXU.jpg"];
+		var verificationCodeArr = ["zAZfB","ZEhUN","zFC9H","zhWY9","Zin4c","ZITGj","zJ6iV","zjsKP","ZKc9S","zKDXU"];
+		var getCode = document.createElement("img");
+		getVerificationCode.onclick = function(){
+			var number = parseInt(Math.random()*10);
+			index = number;
+			getCode.src = imgArr[number];
+			getCode.name = verificationCodeArr[number];
+			imgArea.appendChild(getCode);
+		}
+
+		var landing = document.getElementById("landing");
+		landing.onclick = function landing(){
+			var verificationCode = document.getElementById("verificationCode").value;
+			var nameLength = userName.value.length;
+			var pswdLength = pswd.value.length;
+			var judgeCode = document.getElementById("judgeCode");
+			var flag = true;
+			if(nameLength<4 || nameLength>10){
+				nameTips.innerHTML = "用户名位数不对";
+				flag = false;
+			}
+			if(pswdLength<6 || pswdLength>12){
+				pswTips.innerHTML = "密码位数不对";
+				flag = false;
+			}
+			if(verificationCode != verificationCodeArr[index]){
+				judgeCode.innerHTML = "验证码错误";
+				flag = false;
+			}
+			if(flag){
+				alert("登陆成功");
+			}
+		}
+	</script>
+</html>
