@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>login</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.box{
+			width: 300px;
+			height: 400px;
+			padding: 0 20px;
+			border: 2px solid #1688ea;
+			margin: 50px auto;
+		}
+		.tit{
+			margin-top: 5px;
+			margin-bottom: 30px;
+		}
+		.brand{
+			color: #1688ea;
+			font-size: 18px;
+			margin-right: 20px;
+		}
+		.inp{
+			width: 100%;
+			height: 40px;
+			text-indent: 8px;
+		}
+		.notice{
+			height: 30px;
+			line-height: 30px;
+			font-size: 12px;
+		}
+
+		.code{
+			width: 60%;
+		}
+		.getCode{
+			width: 35%;
+			height: 44px;
+			float: right;
+			border: none;
+			background-color: #eee;
+		}
+		.codeImg{
+			height: 40px;
+		}
+		.btn{
+			background: #1688ea;
+			width: 100%;
+			height: 40px;
+			border: none;
+			margin-top: 8px;
+			color: #fff;
+			border-radius: 3px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="box">
+		<p class="tit">
+			<span class="brand">XXX旅游网</span>
+			<span>用户登录</span>
+		</p>
+
+		<input class="inp" type="text" placeholder="用户名">
+		<p class="notice"></p>
+
+		<input class="inp" type="password" placeholder="密码">
+		<p class="notice"></p>
+
+		<div>
+			<input class="inp code" type="text" placeholder="验证码">
+			<button class="getCode">获取验证码</button>
+		</div>
+		<div class="codeImg">
+			<!-- 点击‘获取验证码’按钮后，在此处添加 验证码图片的img标签 -->
+		</div>
+		<p class="notice"></p>
+
+		<input type="checkbox" checked>下次自动登录
+		<button class="btn">登录</button>
+	</div>
+	<script>
+		var picturePathArr = ["image/zAZfB.jpg","image/ZEhUN.jpg","image/zFC9H.jpg","image/zhWY9.jpg","image/Zin4c.jpg","image/ZITGj.jpg",
+			"image/zJ6iV.jpg","image/zjsKP.jpg","image/ZKc9S.jpg","image/zKDXU.jpg"];//验证码路径数组
+		var pictureNumberArr = ["zAZfB","ZEhUN","zFC9H","zhWY9","Zin4c","ZITGj","zJ6iV","zjsKP","ZKc9S","zKDXU"];//验证码数组
+
+		//提示信息部分（用户名和密码）
+		var inpArr = document.getElementsByClassName("inp");
+		var noticeArr = document.getElementsByClassName("notice");
+
+		for(var i = 0;i < inpArr.length;i++){
+			inpArr[i].onfocus = function(){
+				promptMessage(this.getAttribute("placeholder"));
+			}
+			inpArr[i].onblur = function(){
+				clearMessage(this.getAttribute("placeholder"));
+			}
+		}
+
+		function promptMessage(placeholder){
+			switch (placeholder){
+				case "用户名":
+					var message = "请输入4-10位用户名";
+					noticeArr[0].innerHTML = message;
+					break;
+
+				case "密码":
+					var message = "请输入6-12位密码";
+					noticeArr[1].innerHTML = message;
+					break;
+				case "验证码":
+					noticeArr[2].innerHTML = null;
+			}
+		}
+
+		function clearMessage(placeholder){
+			switch (placeholder){
+				case "用户名":
+					noticeArr[0].innerHTML = null;
+				case "密码":
+					noticeArr[1].innerHTML = null;
+				case "验证码":
+					noticeArr[2].innerHTML = null;
+			}
+		}
+
+
+		//验证码图片部分
+		var getCodeArr = document.getElementsByClassName("getCode");
+		var codeImgArr = document.getElementsByClassName("codeImg");
+
+		getCodeArr[0].onclick = function(){
+			if(codeImgArr[0].children.length == 0){//如果是第一次点击
+				var picturePath = createImgPictureIndex();//获得要引用的图片的路径
+				var imgPicture = document.createElement("img");//创建img节点
+				imgPicture.setAttribute("src",picturePath);//定义其src属性
+				codeImgArr[0].appendChild(imgPicture);//将新节点加入到页面中
+			}
+			else{
+				var picturePath = createImgPictureIndex();//获得要引用的图片的路径
+				codeImgArr[0].children[0].setAttribute("src",picturePath);
+			}
+		}
+
+		function createImgPictureIndex(){
+			var pictureIndex = parseInt(Math.random()*10);
+			return picturePathArr[pictureIndex];
+		}
+
+
+		//判断输入的内容是否正确
+		//不正确提示哪里不正确
+		//正确提示登录成功
+		var logIn = document.getElementsByClassName("btn")[0];
+
+		logIn.onclick = function(){
+			var inpArr = document.getElementsByClassName("inp");
+			if(judgeUsername(inpArr[0].value) == false){
+				var message = "用户名填写错误，请重新填写";
+				noticeArr[0].innerHTML = message;
+			}
+			if(judgePassword(inpArr[1].value) == false){
+				var message = "密码填写错误，请重新填写";
+				noticeArr[1].innerHTML = message;
+			}
+			if(judjePicture(inpArr[2].value) == false){
+				var message = "验证码填写错误，请重新填写";
+				noticeArr[2].innerHTML = message;
+			}
+			if(judgeUsername(inpArr[0].value) == true && judgePassword(inpArr[1].value) == true && judjePicture(inpArr[2].value) == true){//登录成功
+				alert("登录成功");
+			}
+			close();
+		}
+
+		function judgeUsername(name){
+			if(name.length>=4 && name.length<=10){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
+		function judgePassword(password){
+			if(password.length>=6 && password.length<=12){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
+		function judjePicture(verificationCode){
+			var path = document.getElementsByClassName("codeImg")[0].children[0].getAttribute("src");
+			var index = picturePathArr.indexOf(path);
+			if(verificationCode == pictureNumberArr[index]){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	</script>
+</body>
+</html>
